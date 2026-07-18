@@ -122,7 +122,7 @@ export const resumeData: ResumeData = {
     },
     {
       name: "Python 3.4.3 Training",
-      issuer: "IIT Bombay",
+      issuer: "EduPyramids, SINE, IIT Bombay",
       score: "85%",
       fileUrl: "/certificates/PREM-GOUDA-Python 3.4.3-Certificate.pdf"
     },
@@ -134,7 +134,7 @@ export const resumeData: ResumeData = {
     },
     {
       name: "Introduction to Computer Networking",
-      issuer: "Coursera / Cisco",
+      issuer: "Simplilearn",
       fileUrl: "/certificates/INTRODUCTION TO COMPUTER NETWORKING.pdf"
     }
   ],
