@@ -21,6 +21,7 @@ export interface Certification {
   name: string;
   issuer: string;
   score?: string;
+  fileUrl?: string;
 }
 
 export interface Award {
@@ -100,34 +101,41 @@ export const resumeData: ResumeData = {
   certifications: [
     {
       name: "Rapid Development for AI services",
-      issuer: "IBMCE"
+      issuer: "IBMCE",
+      fileUrl: "/certificates/IBMCE CERDAI1IN Certificate _ Etrain.pdf"
     },
     {
       name: "Microsoft Certified Azure Fundamental",
-      issuer: "Microsoft"
+      issuer: "Microsoft",
+      fileUrl: "/certificates/AZ-CERTIFICATE.pdf"
     },
     {
       name: "Java Business Application Training",
       issuer: "IIT Bombay",
-      score: "100%"
+      score: "100%",
+      fileUrl: "/certificates/PREM-GOUDA-JAVA BUSINESS APPLICATION.pdf"
     },
     {
       name: "Introduction to Machine Learning",
-      issuer: "NPTEL, IIT Madras"
+      issuer: "NPTEL, IIT Madras",
+      fileUrl: "/certificates/PREM-NPTEL-ML.pdf"
     },
     {
       name: "Python 3.4.3 Training",
       issuer: "IIT Bombay",
-      score: "85%"
+      score: "85%",
+      fileUrl: "/certificates/PREM-GOUDA-Python 3.4.3-Certificate.pdf"
     },
     {
       name: "Completion of GIT Training",
       issuer: "EduPyramids, SINE, IIT Bombay",
-      score: "90%"
+      score: "90%",
+      fileUrl: "/certificates/PREM-GOUDA-GIT Training.pdf"
     },
     {
       name: "Introduction to Computer Networking",
-      issuer: "Coursera / Cisco"
+      issuer: "Coursera / Cisco",
+      fileUrl: "/certificates/INTRODUCTION TO COMPUTER NETWORKING.pdf"
     }
   ],
   projects: [

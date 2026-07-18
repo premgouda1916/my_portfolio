@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { resumeData } from '../constants/resumeData';
 import type { Certification } from '../constants/resumeData';
 import { SectionHeader } from '../components/SectionHeader';
-import { Award, ExternalLink, X, Calendar, BadgeCheck } from 'lucide-react';
+import { Award, ExternalLink, X, Calendar } from 'lucide-react';
 
 export const Certificates: React.FC = () => {
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
@@ -78,73 +78,65 @@ export const Certificates: React.FC = () => {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 20, opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="relative bg-slate-900 border border-white/10 w-full max-w-2xl rounded-3xl p-6 md:p-10 shadow-2xl overflow-hidden"
+                className="relative bg-slate-900 border border-white/10 w-full max-w-4xl h-[85vh] rounded-3xl p-4 md:p-6 shadow-2xl flex flex-col overflow-hidden"
               >
-                {/* Visual badge highlight */}
-                <div className="absolute -top-16 -right-16 w-48 h-48 bg-accentBlue/20 rounded-full blur-3xl" />
+                {/* Visual background highlight */}
+                <div className="absolute -top-16 -right-16 w-48 h-48 bg-accentBlue/20 rounded-full blur-3xl pointer-events-none" />
                 
+                {/* Header info */}
+                <div className="flex justify-between items-start mb-4 pr-12 z-10">
+                  <div>
+                    <h4 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+                      <Award className="text-accentBlue flex-shrink-0" size={22} />
+                      {selectedCert.name}
+                    </h4>
+                    <p className="text-slate-400 text-xs md:text-sm mt-1">
+                      Issued by: <span className="text-slate-200 font-semibold">{selectedCert.issuer}</span>
+                      {selectedCert.score && ` • Score: ${selectedCert.score}`}
+                    </p>
+                  </div>
+                </div>
+
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedCert(null)}
-                  className="absolute right-6 top-6 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors duration-300 cursor-pointer"
+                  className="absolute right-6 top-6 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors duration-300 cursor-pointer z-20"
                   aria-label="Close modal"
                 >
                   <X size={18} />
                 </button>
 
-                {/* Simulated Certificate Render */}
-                <div className="border-4 border-slate-950 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-center relative">
-                  {/* Watermark Logo */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
-                    <Award size={200} />
-                  </div>
-
-                  <span className="font-mono text-[9px] tracking-[0.2em] text-accentCyan font-bold uppercase block mb-4">
-                    Official Verification Certificate
-                  </span>
-
-                  <h4 className="text-3xl font-extrabold text-white mb-2 tracking-tight">
-                    {selectedCert.name}
-                  </h4>
-                  
-                  <div className="h-0.5 w-24 bg-gradient-to-r from-accentBlue to-accentCyan mx-auto mb-6" />
-
-                  <p className="text-slate-300 text-sm italic mb-6">
-                    This document certifies that
-                  </p>
-
-                  <h5 className="text-2xl font-bold text-white mb-6 font-sans">
-                    Prem Gouda
-                  </h5>
-
-                  <p className="text-slate-200 text-sm leading-relaxed max-w-md mx-auto mb-8">
-                    has successfully completed the coursework requirements, examinations, and projects mandated by the issuing institution.
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-6 border-t border-white/5 pt-6 text-left">
-                    <div>
-                      <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-400">Issuer</span>
-                      <span className="font-bold text-slate-200 text-sm">{selectedCert.issuer}</span>
+                {/* PDF Frame */}
+                <div className="flex-1 w-full bg-slate-950 rounded-2xl overflow-hidden border border-white/5 relative z-10">
+                  {selectedCert.fileUrl ? (
+                    <iframe
+                      src={`${selectedCert.fileUrl}#view=FitH`}
+                      title={selectedCert.name}
+                      className="w-full h-full border-0"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+                      <Award size={48} className="text-slate-600 mb-3" />
+                      <p className="text-slate-400 mb-2">No file available for this certificate.</p>
                     </div>
-                    {selectedCert.score ? (
-                      <div>
-                        <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-400">Verification / Score</span>
-                        <span className="font-bold text-accentCyan text-sm">{selectedCert.score} (Excellent)</span>
-                      </div>
-                    ) : (
-                      <div>
-                        <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-400">Status</span>
-                        <span className="font-bold text-emerald-400 text-sm flex items-center gap-1">
-                          <BadgeCheck size={16} /> Verified Active
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
 
-                <div className="mt-6 flex justify-between items-center text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5"><Calendar size={14} /> Completed Academic Term</span>
-                  <span>ID: VER-{selectedCert.name.slice(0,4).toUpperCase()}-{Math.floor(Math.random()*9000+1000)}</span>
+                {/* Footer and fallback link */}
+                <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400 z-10">
+                  <span className="flex items-center gap-1.5 font-mono text-[10px] md:text-xs">
+                    <Calendar size={14} /> ID: VER-{selectedCert.name.slice(0, 4).toUpperCase().replace(/\s+/g, '')}-{selectedCert.issuer.slice(0, 3).toUpperCase()}
+                  </span>
+                  {selectedCert.fileUrl && (
+                    <a
+                      href={selectedCert.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accentBlue/10 hover:bg-accentBlue/20 text-accentBlue hover:text-accentCyan font-semibold transition-all duration-300 border border-accentBlue/20"
+                    >
+                      Open PDF in New Window <ExternalLink size={14} />
+                    </a>
+                  )}
                 </div>
               </motion.div>
             </div>
