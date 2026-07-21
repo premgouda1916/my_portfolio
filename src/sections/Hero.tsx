@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { resumeData } from '../constants/resumeData';
-import { ArrowRight, Download, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowRight, Download, Github, Linkedin, Mail, Eye } from 'lucide-react';
+import { ResumeModal } from '../components/ResumeModal';
 
 export const Hero: React.FC = () => {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   
   const roles = [
     "Full-Stack Engineer",
@@ -48,7 +50,6 @@ export const Hero: React.FC = () => {
   };
 
   const handleResumeDownload = () => {
-    // Attempt download of resume.pdf
     const link = document.createElement('a');
     link.href = '/resume.pdf';
     link.download = 'Prem_Gouda_Resume.pdf';
@@ -62,12 +63,14 @@ export const Hero: React.FC = () => {
       id="hero" 
       className="min-h-screen relative flex items-center justify-center pt-24 pb-16 overflow-hidden px-6 md:px-12"
     >
+      <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />
+
       {/* Visual blur highlights */}
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-accentBlue/20 rounded-full blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-accentCyan/20 rounded-full blur-3xl animate-pulse-slow pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-600/08 rounded-full blur-3xl pointer-events-none" />
 
       {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000006_1px,transparent_1px),linear-gradient(to_bottom,#00000006_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
@@ -119,19 +122,28 @@ export const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
+            className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-8 flex-wrap"
           >
             <button
               onClick={handleContactClick}
-              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-accentBlue to-accentCyan text-white font-semibold flex items-center justify-center gap-2 shadow-glow-blue hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 cursor-pointer"
+              className="px-6 py-3.5 rounded-full bg-gradient-to-r from-accentBlue to-accentCyan text-white font-semibold flex items-center justify-center gap-2 shadow-glow-blue hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 cursor-pointer text-sm"
             >
               Get In Touch <ArrowRight size={18} />
             </button>
+
+            <button
+              onClick={() => setIsResumeModalOpen(true)}
+              className="px-6 py-3.5 rounded-full bg-slate-800/80 hover:bg-slate-800 text-white border border-accentBlue/30 font-semibold flex items-center justify-center gap-2 hover:border-accentBlue transition-all duration-300 cursor-pointer text-sm shadow-md"
+            >
+              <Eye size={18} className="text-accentCyan" /> View Resume
+            </button>
+
             <button
               onClick={handleResumeDownload}
-              className="px-8 py-3.5 rounded-full bg-slate-800/60 hover:bg-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 text-white border border-white/10 font-semibold flex items-center justify-center gap-2 hover:border-white/20 transition-all duration-300 cursor-pointer"
+              className="px-5 py-3.5 rounded-full bg-slate-100 dark:bg-slate-900/60 hover:bg-slate-200 dark:hover:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-white/10 font-semibold flex items-center justify-center gap-2 hover:border-slate-400 dark:hover:border-white/20 transition-all duration-300 cursor-pointer text-sm"
+              title="Direct Download PDF"
             >
-              Download Resume <Download size={18} />
+              <Download size={18} /> Download
             </button>
           </motion.div>
 

@@ -67,8 +67,8 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-900/20 dark:bg-darkBg/10">
-      <div className="absolute top-1/2 left-0 w-80 h-80 bg-accentCyan/5 rounded-full blur-3xl pointer-events-none" />
+    <section id="contact" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-100/40 dark:bg-slate-900/20">
+      <div className="absolute top-1/2 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
         <SectionHeader
@@ -141,31 +141,39 @@ export const Contact: React.FC = () => {
                   />
                 </div>
 
-                <div className="flex items-center gap-4 mt-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-accentBlue to-accentCyan text-white font-semibold flex items-center justify-center gap-2 hover:shadow-glow-blue hover:scale-102 disabled:opacity-50 disabled:pointer-events-none transition-all duration-300 cursor-pointer"
+                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-accentBlue to-accentCyan text-white font-semibold flex items-center justify-center gap-2 hover:shadow-glow-blue hover:scale-102 disabled:opacity-50 disabled:pointer-events-none transition-all duration-300 cursor-pointer text-sm shadow-md"
                   >
                     {isSubmitting ? (
-                      <>Sending... <RefreshCw size={18} className="animate-spin" /></>
+                      <>Sending Message... <RefreshCw size={18} className="animate-spin" /></>
                     ) : (
                       <>Send Message <Send size={18} /></>
                     )}
                   </button>
 
-                  {submitStatus === 'success' && (
-                    <span className="text-emerald-400 font-medium text-sm flex items-center gap-1.5 animate-pulse">
-                      <CheckCircle size={18} /> Message sent successfully!
-                    </span>
-                  )}
-
-                  {submitStatus === 'error' && (
-                    <span className="text-red-400 font-medium text-sm animate-pulse">
-                      Oops! Something went wrong.
-                    </span>
-                  )}
+                  <a
+                    href={`mailto:${resumeData.email}?subject=Portfolio%20Inquiry`}
+                    className="px-6 py-3.5 rounded-full bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
+                  >
+                    <Mail size={16} /> Open Email App
+                  </a>
                 </div>
+
+                {submitStatus === 'success' && (
+                  <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold flex items-center gap-3 animate-fade-in">
+                    <CheckCircle size={20} className="flex-shrink-0" />
+                    <span>Thank you! Your message has been sent successfully. I will get back to you shortly! 🎉</span>
+                  </div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center gap-3 animate-fade-in">
+                    <span>Oops! Failed to send automatically. Please reach out directly to <a href={`mailto:${resumeData.email}`} className="underline font-bold">{resumeData.email}</a>.</span>
+                  </div>
+                )}
               </form>
             </div>
           </div>

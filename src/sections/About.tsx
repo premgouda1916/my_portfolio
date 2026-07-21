@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { resumeData } from '../constants/resumeData';
 import { SectionHeader } from '../components/SectionHeader';
-import { Calendar, MapPin, Mail, Phone, BookOpen, Globe } from 'lucide-react';
+import { Calendar, MapPin, Mail, Phone, BookOpen, Globe, Eye } from 'lucide-react';
+import { ResumeModal } from '../components/ResumeModal';
 
 export const About: React.FC = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -28,7 +31,8 @@ export const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-900/20 dark:bg-darkBg/10">
+    <section id="about" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-100/40 dark:bg-slate-900/20">
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
       <div className="max-w-7xl mx-auto">
         <SectionHeader
           badge="About Me"
@@ -52,7 +56,7 @@ export const About: React.FC = () => {
                 Full stack engineer with expertise in Java, JavaScript, HTML, CSS, and modern frameworks such as React and Node.js. Proven ability to develop scalable and efficient web applications that enhance user experience. Committed to continuous improvement in backend development, system design, and cloud technologies.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 {details.map((detail, idx) => (
                   <div key={idx} className="flex gap-4 items-center">
                     <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-950/50 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300">
@@ -65,6 +69,13 @@ export const About: React.FC = () => {
                   </div>
                 ))}
               </div>
+
+              <button
+                onClick={() => setIsResumeOpen(true)}
+                className="w-full py-3 rounded-2xl bg-accentBlue/10 hover:bg-accentBlue/20 text-accentBlue font-semibold text-xs md:text-sm border border-accentBlue/20 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Eye size={16} /> View Full Resume (PDF)
+              </button>
             </div>
 
             <div className="bg-glass dark:bg-glass p-8 rounded-3xl border border-white/5 hover:border-accentCyan/20 transition-all duration-300">

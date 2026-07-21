@@ -39,7 +39,7 @@ export const Projects: React.FC = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
         
         {/* Glowing floating light sphere */}
-        <div className="absolute w-32 h-32 bg-accentBlue/20 rounded-full blur-2xl animate-pulse-slow" />
+        <div className="absolute w-32 h-32 bg-blue-500/10 rounded-full blur-2xl" />
         
         {/* Central code graphics */}
         <div className="relative z-10 p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-glow-blue flex items-center justify-center animate-float">
@@ -59,9 +59,9 @@ export const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-900/5 dark:bg-darkBg/5">
+    <section id="projects" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-100/40 dark:bg-slate-900/20">
       {/* Light highlights */}
-      <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-accentCyan/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
         <SectionHeader

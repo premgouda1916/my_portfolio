@@ -27,6 +27,11 @@ export interface Certification {
 export interface Award {
   title: string;
   description: string;
+  issuer?: string;
+  score?: string;
+  fileUrl?: string;
+  category?: 'academic' | 'hackathon' | 'achievement' | 'award';
+  date?: string;
 }
 
 export interface Language {
@@ -180,19 +185,35 @@ export const resumeData: ResumeData = {
   awards: [
     {
       title: "Academic Excellence - B.E 1st Year",
-      description: "Awarded first rank in first-year of Engineering with a CGPA of 9.5."
+      issuer: "Visvesvaraya Technological University (VTU)",
+      score: "CGPA: 9.5 (1st Rank)",
+      category: "academic",
+      description: "Awarded first rank in first-year of Engineering with a CGPA of 9.5.",
+      fileUrl: "/certificates/Prem-1st-sem.pdf"
     },
     {
       title: "Academic Excellence - B.E 2nd Year",
-      description: "Awarded first rank in second-year of Engineering with a CGPA of 9.44."
+      issuer: "Visvesvaraya Technological University (VTU)",
+      score: "CGPA: 9.44 (1st Rank)",
+      category: "academic",
+      description: "Awarded first rank in second-year of Engineering with a CGPA of 9.44.",
+      fileUrl: "/certificates/Prem-2nd-sem.pdf"
     },
     {
       title: "TechFusion 2.0 Hackathon",
-      description: "Participated and presented NeuroGuard at Dayananda Sagar Academy of Technology and Management, Bengaluru."
+      issuer: "DSATM, Bengaluru",
+      score: "Hackathon Finalist",
+      category: "hackathon",
+      description: "Participated and presented NeuroGuard at Dayananda Sagar Academy of Technology and Management, Bengaluru.",
+      fileUrl: "/certificates/certi techfusion.pdf"
     },
     {
       title: "Intercollege Hackathon GCEM 3.0",
-      description: "Participated and showcased innovative projects in Bangalore."
+      issuer: "GCEM, Bangalore",
+      score: "Hackathon Participant",
+      category: "hackathon",
+      description: "Participated and showcased innovative projects in Bangalore.",
+      fileUrl: "/certificates/Prem-certi-gcem.pdf"
     }
   ],
   languages: [

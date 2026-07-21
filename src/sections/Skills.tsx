@@ -97,7 +97,7 @@ export const Skills: React.FC = () => {
     .join(' ');
 
   return (
-    <section id="skills" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-900/10 dark:bg-darkBg/5">
+    <section id="skills" className="py-24 px-6 md:px-12 relative overflow-hidden bg-slate-100/40 dark:bg-slate-900/20">
       {/* Visual background lights */}
       <div className="absolute top-1/3 left-0 w-80 h-80 bg-accentCyan/5 rounded-full blur-3xl pointer-events-none" />
 

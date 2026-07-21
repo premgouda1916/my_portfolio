@@ -74,7 +74,7 @@ const App: React.FC = () => {
       </Helmet>
 
       {/* Global layouts */}
-      <div className="relative min-h-screen bg-slate-50 dark:bg-darkBg text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden font-sans transition-colors duration-300">
+      <div className="relative min-h-screen bg-slate-100 dark:bg-darkBg text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden font-sans transition-colors duration-300">
         
         {/* Scroll Progress Bar */}
         <div 

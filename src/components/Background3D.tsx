@@ -14,7 +14,7 @@ export const Background3D: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Track mouse position
+    // Smooth mouse position tracking
     const mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2 };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -30,117 +30,110 @@ export const Background3D: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('resize', handleResize);
 
-    // 3D Particles
-    const particleCount = 100;
-    const particles: Array<{
-      x3d: number;
-      y3d: number;
-      z3d: number;
-      size: number;
-      color: string;
-    }> = [];
+    // Number of particles optimized for screen size
+    const particleCount = Math.floor(Math.min(width, height) / 14);
+    
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      alpha: number;
+      baseAlpha: number;
+    }
 
-    // Initialize particles in a 3D sphere
+    const particles: Particle[] = [];
+
+    // Initialize floating ambient particles
     for (let i = 0; i < particleCount; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(Math.random() * 2 - 1);
-      const radius = 200 + Math.random() * 150;
-
+      const baseAlpha = Math.random() * 0.25 + 0.1;
       particles.push({
-        x3d: radius * Math.sin(phi) * Math.cos(theta),
-        y3d: radius * Math.sin(phi) * Math.sin(theta),
-        z3d: radius * Math.cos(phi),
-        size: Math.random() * 2 + 1,
-        color: Math.random() > 0.5 ? '#3B82F6' : '#06B6D4',
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        radius: Math.random() * 1.5 + 1.0,
+        alpha: baseAlpha,
+        baseAlpha,
       });
     }
 
-    // Rotation angles
-    let angleX = 0.001;
-    let angleY = 0.0015;
-
-    const focalLength = 400;
+    const connectionDistance = 140;
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse follow
-      mouse.x += (mouse.targetX - mouse.x) * 0.05;
-      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+      // Smooth mouse easing
+      mouse.x += (mouse.targetX - mouse.x) * 0.04;
+      mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
-      // Draw subtle glow highlight at mouse position
+      // Ultra-subtle ambient glow spotlight behind mouse (very faint, soft executive blue/indigo tint)
       const gradient = ctx.createRadialGradient(
         mouse.x,
         mouse.y,
         0,
         mouse.x,
         mouse.y,
-        width > 768 ? 400 : 200
+        width > 768 ? 350 : 200
       );
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.07)');
-      gradient.addColorStop(0.5, 'rgba(6, 182, 212, 0.03)');
-      gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      gradient.addColorStop(0, 'rgba(99, 102, 241, 0.035)');
+      gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.015)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // Dynamic rotation based on mouse offset from center
-      const mouseOffsetX = (mouse.x - width / 2) / (width / 2);
-      const mouseOffsetY = (mouse.y - height / 2) / (height / 2);
-      
-      const currentAngleX = angleX + mouseOffsetY * 0.002;
-      const currentAngleY = angleY + mouseOffsetX * 0.002;
+      // Update & render particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
 
-      // Cosine and Sine values for 3D rotation
-      const cosX = Math.cos(currentAngleX);
-      const sinX = Math.sin(currentAngleX);
-      const cosY = Math.cos(currentAngleY);
-      const sinY = Math.sin(currentAngleY);
+        // Gentle position step
+        p.x += p.vx;
+        p.y += p.vy;
 
-      // Sort particles by Z-depth for correct rendering order (depth sorting)
-      particles.sort((a, b) => b.z3d - a.z3d);
+        // Screen boundary wrap around seamlessly
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
 
-      particles.forEach((p) => {
-        // Rotate X
-        let y1 = p.y3d * cosX - p.z3d * sinX;
-        let z1 = p.z3d * cosX + p.y3d * sinX;
+        // Subtle mouse push effect
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          const force = (120 - dist) / 120;
+          p.alpha = Math.min(0.5, p.baseAlpha + force * 0.3);
+        } else {
+          p.alpha += (p.baseAlpha - p.alpha) * 0.05;
+        }
 
-        // Rotate Y
-        let x2 = p.x3d * cosY - z1 * sinY;
-        let z2 = z1 * cosY + p.x3d * sinY;
+        // Draw individual node dot
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(148, 163, 184, ${p.alpha})`;
+        ctx.fill();
 
-        // Update particle coordinates
-        p.x3d = x2;
-        p.y3d = y1;
-        p.z3d = z2;
+        // Connect nearby particles with delicate network lines
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const pdx = p.x - p2.x;
+          const pdy = p.y - p2.y;
+          const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
 
-        // Project to 2D screen
-        const scale = focalLength / (focalLength + z2);
-        const screenX = width / 2 + x2 * scale;
-        const screenY = height / 2 + y1 * scale;
-
-        // Only draw if on screen
-        if (screenX >= 0 && screenX <= width && screenY >= 0 && screenY <= height) {
-          const alpha = Math.max(0.1, Math.min(1, scale * 0.8));
-          ctx.beginPath();
-          ctx.arc(screenX, screenY, p.size * scale * 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = alpha;
-          ctx.fill();
-          
-          // Add subtle outer glow to closer particles
-          if (z2 < 50) {
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = p.color;
+          if (pdist < connectionDistance) {
+            const lineAlpha = (1 - pdist / connectionDistance) * 0.12 * Math.min(p.alpha, p2.alpha);
             ctx.beginPath();
-            ctx.arc(screenX, screenY, p.size * scale * 0.8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0; // reset
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(148, 163, 184, ${lineAlpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
           }
         }
-      });
+      }
 
-      ctx.globalAlpha = 1.0;
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -155,3 +148,4 @@ export const Background3D: React.FC = () => {
 
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
 };
+
