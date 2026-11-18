@@ -1,74 +1,82 @@
 import React from 'react';
 import { useVisitorCounter } from '../hooks/useVisitorCounter';
 import { resumeData } from '../constants/resumeData';
-import { Github, Linkedin, Mail, Heart, Eye } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp, Terminal } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const visitors = useVisitorCounter();
 
-  const handleLinkClick = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-slate-950 border-t border-white/5 py-12 px-6 md:px-12 relative overflow-hidden">
-      {/* Subtle radial background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-accentBlue/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+    <footer className="bg-white dark:bg-[#08090D] border-t-2 border-black dark:border-white/20 py-12 px-4 sm:px-6 lg:px-8 text-black dark:text-white">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         
-        {/* Left Side: Brand Logo & Credits */}
+        {/* Brand Colophon */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="flex items-center gap-1.5 cursor-pointer mb-3" onClick={() => handleLinkClick('hero')}>
-            <span className="font-extrabold text-xl tracking-tight text-white">
-              PREM GOUDA<span className="text-accentBlue">.</span>
+          <div className="flex items-center gap-2 mb-1.5 cursor-pointer" onClick={scrollToTop}>
+            <span className="font-display font-black text-xl uppercase tracking-tight text-black dark:text-white">
+              {resumeData.name}
+            </span>
+            <span className="font-mono text-xs px-2 py-0.5 bg-black text-white dark:bg-white dark:text-black font-bold">
+              PORTFOLIO
             </span>
           </div>
-          <p className="text-xs text-slate-400 max-w-xs leading-normal">
-            A premium developer portfolio handcrafted to showcase full stack engineering and AI solutions.
+          <p className="font-mono text-[11px] text-slate-600 dark:text-slate-400 max-w-sm">
+            Information Science & Engineering • Yenepoya Institute of Technology, Mangalore (VTU).
           </p>
         </div>
 
-        {/* Center: Social Networking Icons */}
-        <div className="flex gap-4">
+        {/* Social Navigation */}
+        <div className="flex items-center gap-2 font-mono text-xs">
           <a
             href={resumeData.socials.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2.5 rounded-xl bg-slate-900 border border-white/5 text-slate-400 hover:text-white hover:scale-105 transition-all duration-300"
+            className="p-2.5 bg-slate-100 dark:bg-[#141620] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black border-2 border-black dark:border-white transition-colors"
             aria-label="GitHub"
           >
-            <Github size={18} />
+            <Github size={17} />
           </a>
           <a
             href={resumeData.socials.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2.5 rounded-xl bg-slate-900 border border-white/5 text-slate-400 hover:text-white hover:scale-105 transition-all duration-300"
+            className="p-2.5 bg-slate-100 dark:bg-[#141620] hover:bg-[#0077b5] hover:text-white border-2 border-black dark:border-white transition-colors"
             aria-label="LinkedIn"
           >
-            <Linkedin size={18} />
+            <Linkedin size={17} />
           </a>
           <a
             href={`mailto:${resumeData.email}`}
-            className="p-2.5 rounded-xl bg-slate-900 border border-white/5 text-slate-400 hover:text-white hover:scale-105 transition-all duration-300"
+            className="p-2.5 bg-slate-100 dark:bg-[#141620] hover:bg-red-500 hover:text-white border-2 border-black dark:border-white transition-colors"
             aria-label="Email"
           >
-            <Mail size={18} />
+            <Mail size={17} />
           </a>
+
+          {/* Quick Back to Top */}
+          <button
+            onClick={scrollToTop}
+            className="p-2.5 bg-amber-300 hover:bg-amber-400 text-black border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer ml-2"
+            aria-label="Back to top"
+            title="Return to top"
+          >
+            <ArrowUp size={17} />
+          </button>
         </div>
 
-        {/* Right Side: Visitor Badge & Copyright */}
-        <div className="flex flex-col items-center md:items-end text-center md:text-right gap-3">
-          {/* Visitor Counter */}
-          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900 border border-white/5 shadow-inner">
-            <Eye size={14} className="text-accentCyan" />
-            <span className="text-xs text-slate-400 font-medium">Visitor Count:</span>
-            <span className="text-xs font-mono font-bold text-white tracking-widest">{visitors}</span>
+        {/* Visitor Counter & Copyright */}
+        <div className="flex flex-col items-center md:items-end font-mono text-[11px] text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-[#141620] border border-black dark:border-white/20 mb-1.5">
+            <Terminal size={12} className="text-blue-600 dark:text-blue-400" />
+            <span>VISITOR TELEMETRY:</span>
+            <strong className="text-black dark:text-white font-bold">{visitors}</strong>
           </div>
-
-          <div className="text-[10px] text-slate-400 flex items-center gap-1 font-mono uppercase tracking-widest select-none">
-            © {new Date().getFullYear()} PREM GOUDA. MADE WITH <Heart size={10} className="text-red-500 animate-pulse" />
+          <div>
+            © {new Date().getFullYear()} PREM GOUDA • ALL RIGHTS RESERVED
           </div>
         </div>
 

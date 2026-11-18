@@ -2,107 +2,78 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { resumeData } from '../constants/resumeData';
 import { SectionHeader } from '../components/SectionHeader';
-import { GraduationCap, Award, MapPin } from 'lucide-react';
+import { GraduationCap, MapPin } from 'lucide-react';
 
 export const Education: React.FC = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { x: -30, opacity: 0 },
-    visible: { 
-      x: 0, 
-      opacity: 1, 
-      transition: { type: 'spring', stiffness: 100, damping: 12 } as const
-    }
-  };
-
-
   return (
-    <section id="education" className="py-24 px-6 md:px-12 relative overflow-hidden">
-      {/* Light highlights */}
-      <div className="absolute top-1/2 right-0 w-80 h-80 bg-accentBlue/5 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="education" className="py-20 px-4 sm:px-6 lg:px-8 border-b-2 border-black dark:border-white/20 bg-white dark:bg-[#0C0D12]">
       <div className="max-w-5xl mx-auto">
         <SectionHeader
-          badge="Journey"
-          title="Education Timeline"
-          subtitle="My academic foundation in Information Science & Engineering and basic sciences."
+          index="// 02"
+          badge="Academic Credentials"
+          title="Education History"
+          subtitle="A proven academic track record across engineering and pre-university sciences."
         />
 
-        <div className="relative border-l border-slate-700/60 dark:border-slate-800/80 ml-4 md:ml-32 pl-8 md:pl-12 flex flex-col gap-12">
+        {/* Brutalist Timeline Container */}
+        <div className="relative pl-6 sm:pl-10 ml-2 sm:ml-6 border-l-4 border-black dark:border-white/40 flex flex-col gap-10">
           {resumeData.education.map((edu, idx) => (
             <motion.div
               key={idx}
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
               className="relative"
             >
-              {/* Timeline dot */}
-              <div className="absolute -left-[41px] md:-left-[57px] top-1.5 w-6 h-6 rounded-full bg-slate-900 border-4 border-accentBlue flex items-center justify-center shadow-glow-blue z-10">
-                <div className="w-1.5 h-1.5 rounded-full bg-accentCyan" />
-              </div>
-
-              {/* Year Badge on the left (visible on desktop) */}
-              <div className="hidden md:block absolute -left-[180px] top-1.5 w-[120px] text-right font-mono font-bold text-accentCyan text-sm">
-                {edu.period.split(' ').slice(-1)[0]}
+              {/* Timeline Indicator Block */}
+              <div className="absolute -left-[35px] sm:-left-[51px] top-4 w-5 h-5 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white flex items-center justify-center font-mono text-[10px] font-bold">
+                {idx + 1}
               </div>
 
               {/* Education Card */}
-              <motion.div
-                variants={cardVariants}
-                className="bg-glass dark:bg-glass p-6 md:p-8 rounded-3xl border border-white/5 relative group hover:border-accentBlue/30 transition-all duration-300 shadow-xl"
-              >
-                {/* Visual hover top gradient line */}
-                <div className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-accentBlue/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                  <div>
-                    <span className="md:hidden inline-block font-mono text-accentCyan text-xs font-bold mb-2">
-                      {edu.period}
-                    </span>
-                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-accentBlue transition-colors duration-300">
-                      {edu.degree}
-                    </h3>
-                    <p className="text-slate-700 dark:text-slate-300 font-semibold mt-1 flex items-center gap-1.5">
-                      <GraduationCap size={18} className="text-accentCyan" /> {edu.institution}
-                    </p>
-                  </div>
-                  
+              <div className="p-6 sm:p-8 bg-slate-50 dark:bg-[#141620] border-2 border-black dark:border-white/30 shadow-[5px_5px_0px_#000] dark:shadow-[5px_5px_0px_#38bdf8]">
+                {/* Header Strip */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-4 border-b-2 border-black dark:border-white/20">
+                  <span className="font-mono text-xs font-black uppercase px-2.5 py-1 bg-black text-white dark:bg-white dark:text-black">
+                    {edu.period}
+                  </span>
+
                   {(edu.gpa || edu.score) && (
-                    <div className="flex items-center gap-2 self-start md:self-center px-4 py-2 rounded-2xl bg-accentBlue/10 border border-accentBlue/20 text-accentBlue font-mono text-sm font-bold shadow-sm animate-fade-in">
-                      <Award size={16} /> {edu.gpa ? `GPA: ${edu.gpa}` : `Score: ${edu.score}`}
-                    </div>
+                    <span className="font-mono text-xs font-bold px-3 py-1 bg-amber-300 text-black border-2 border-black shadow-[2px_2px_0px_#000]">
+                      {edu.gpa || `Score: ${edu.score}`}
+                    </span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-2">
-                  <MapPin size={14} /> {edu.location}
+                {/* Degree & Institution */}
+                <h3 className="font-display font-black text-xl sm:text-2xl uppercase tracking-tight text-black dark:text-white mb-1.5">
+                  {edu.degree}
+                </h3>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-slate-700 dark:text-slate-300 mb-4">
+                  <span className="flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-400">
+                    <GraduationCap size={16} /> {edu.institution}
+                  </span>
+                  <span className="flex items-center gap-1 text-slate-500">
+                    <MapPin size={14} /> {edu.location}
+                  </span>
                 </div>
 
-                {/* Additional Details based on level */}
-                <div className="mt-4 pt-4 border-t border-white/5 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                  {idx === 0 ? (
-                    <ul className="list-disc list-inside space-y-1">
-                      <li>Focusing on Data Structures, Database Systems, Web Development, and Machine Learning.</li>
-                      <li>Achieved Rank 1 in both 1st and 2nd years with 9.5 and 9.44 CGPA respectively.</li>
+                {/* Key Bullet Highlights */}
+                {edu.details && edu.details.length > 0 && (
+                  <div className="pt-3 border-t border-black/10 dark:border-white/10">
+                    <ul className="space-y-1.5 font-sans text-xs sm:text-sm text-slate-800 dark:text-slate-300">
+                      {edu.details.map((detail, dIdx) => (
+                        <li key={dIdx} className="flex items-start gap-2">
+                          <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">▪</span>
+                          <span>{detail}</span>
+                        </li>
+                      ))}
                     </ul>
-                  ) : idx === 1 ? (
-                    <p>Focused on Physics, Chemistry, Mathematics, and Biology (PCMB) course work in pre-university training.</p>
-                  ) : (
-                    <p>Secondary education training under CBSE curriculum with high academic standings.</p>
-                  )}
-                </div>
-              </motion.div>
+                  </div>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>

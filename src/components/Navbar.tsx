@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { resumeData } from '../constants/resumeData';
-import { Menu, X, Code, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, FileText } from 'lucide-react';
+import { ResumeModal } from './ResumeModal';
 
 interface NavbarProps {
   theme: 'dark' | 'light';
@@ -11,6 +12,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   const sectionIds = [
     'hero',
@@ -54,100 +56,120 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? 'py-4 bg-white/85 dark:bg-darkBg/85 backdrop-blur-md border-b border-slate-200 dark:border-white/5 shadow-lg'
-          : 'py-6 bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-        {/* Logo */}
-        <div 
-          onClick={() => handleLinkClick('hero')} 
-          className="flex items-center gap-2 cursor-pointer group"
-        >
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-accentBlue to-accentCyan text-white shadow-glow-blue transition-transform group-hover:scale-105 duration-300">
-            <Code size={20} />
+    <>
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+
+      <header
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-200 border-b-2 ${
+          scrolled
+            ? 'bg-white/95 dark:bg-[#0C0D12]/95 backdrop-blur-sm border-black dark:border-white/20 shadow-[0_4px_0px_rgba(0,0,0,0.06)]'
+            : 'bg-white/80 dark:bg-[#0C0D12]/80 backdrop-blur-sm border-black/80 dark:border-white/10'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+          
+          {/* Logo / Brandmark */}
+          <div 
+            onClick={() => handleLinkClick('hero')} 
+            className="flex items-center gap-2.5 cursor-pointer group select-none"
+          >
+            <div className="w-8 h-8 bg-black text-white dark:bg-white dark:text-black font-display font-black text-sm flex items-center justify-center border-2 border-black dark:border-white shadow-[2px_2px_0px_#2563eb] group-hover:translate-x-[-1px] group-hover:translate-y-[-1px] transition-transform">
+              PG
+            </div>
+            <div className="flex flex-col">
+              <span className="font-display font-black tracking-tight text-base uppercase text-black dark:text-white leading-none">
+                {resumeData.name}
+              </span>
+              <span className="font-mono text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-tight">
+                ISE // AI & Full-Stack
+              </span>
+            </div>
           </div>
-          <span className="font-bold text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent group-hover:text-accentBlue transition-colors duration-300">
-            {resumeData.name.split(' ')[0]}
-            <span className="text-accentBlue">.</span>
-          </span>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleLinkClick(link.id)}
+                  className={`px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white shadow-[2px_2px_0px_#2563eb]'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/5 border-2 border-transparent'
+                  }`}
+                >
+                  {link.name}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Action CTAs: Resume & Theme */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setIsResumeOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-amber-300 hover:bg-amber-400 text-black font-mono font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#fff] brutal-press cursor-pointer"
+            >
+              <FileText size={14} />
+              <span>Resume.pdf</span>
+            </button>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 bg-white dark:bg-slate-900 text-black dark:text-white border-2 border-black dark:border-white shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#fff] brutal-press cursor-pointer"
+              aria-label="Toggle visual theme"
+              title="Toggle theme"
+            >
+              {theme === 'dark' ? (
+                <Sun size={17} className="text-amber-400" />
+              ) : (
+                <Moon size={17} className="text-slate-800" />
+              )}
+            </button>
+
+            {/* Mobile Drawer Trigger */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-1.5 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white cursor-pointer"
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-8">
-          <div className="flex gap-1 p-1 bg-slate-100/80 dark:bg-slate-950/40 rounded-full border border-slate-200 dark:border-white/5 backdrop-blur-sm">
+        {/* Mobile Navigation Drawer */}
+        {isOpen && (
+          <div className="lg:hidden bg-white dark:bg-[#0C0D12] border-b-2 border-black dark:border-white/20 p-6 flex flex-col gap-2">
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => handleLinkClick(link.id)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 cursor-pointer ${
+                className={`py-2 px-3 text-left font-mono font-bold text-sm uppercase tracking-wider flex justify-between items-center border-b border-slate-200 dark:border-white/10 ${
                   activeSection === link.id
-                    ? 'bg-gradient-to-r from-accentBlue to-accentCyan text-white shadow-md'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5'
+                    ? 'text-blue-600 dark:text-blue-400 bg-slate-100 dark:bg-white/5'
+                    : 'text-slate-800 dark:text-slate-200'
                 }`}
               >
-                {link.name}
+                <span>{link.name}</span>
+                <span className="font-mono text-xs opacity-60">→</span>
               </button>
             ))}
-          </div>
-
-          {/* Theme Switcher */}
-          <button
-            onClick={toggleTheme}
-            className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-950/40 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-300 cursor-pointer"
-            aria-label="Toggle Theme"
-          >
-            {theme === 'dark' ? <Sun size={18} className="text-amber-400 animate-pulse-slow" /> : <Moon size={18} className="text-slate-600" />}
-          </button>
-        </div>
-
-        {/* Mobile Menu Actions */}
-        <div className="lg:hidden flex items-center gap-4">
-          {/* Theme Switcher */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-slate-100 dark:bg-slate-950/40 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
-            aria-label="Toggle Theme"
-          >
-            {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-600" />}
-          </button>
-
-          {/* Hamburger */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white focus:outline-none cursor-pointer"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      <div
-        className={`lg:hidden fixed top-[73px] left-0 w-full h-[calc(100vh-73px)] bg-white/95 dark:bg-darkBg/95 backdrop-blur-lg border-t border-slate-200 dark:border-white/5 transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col items-center justify-center h-full gap-8 px-6 pb-24">
-          {navLinks.map((link) => (
             <button
-              key={link.id}
-              onClick={() => handleLinkClick(link.id)}
-              className={`text-2xl font-semibold tracking-wide transition-all cursor-pointer ${
-                activeSection === link.id
-                  ? 'text-accentBlue'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+              onClick={() => {
+                setIsOpen(false);
+                setIsResumeOpen(true);
+              }}
+              className="mt-3 w-full py-2.5 bg-amber-300 text-black font-mono font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2"
             >
-              {link.name}
+              <FileText size={16} /> View Official Resume (PDF)
             </button>
-          ))}
-        </div>
-      </div>
-    </nav>
+          </div>
+        )}
+      </header>
+    </>
   );
 };
